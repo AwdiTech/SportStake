@@ -1,35 +1,32 @@
-import { useState } from 'react'
+import "./App.css";
+import Login from "./pages/Login/Login";
+import Registration from "./pages/Registration/Registration";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
-
+  
+  // App routing
+  // The `Router` component is the parent component that wraps the `Routes` and `Route` components.
+  // The `Routes` component is a container for multiple `Route` components.
+  // The `Route` component is used to define a route and its corresponding component.
+  // Add more `Route` components to define more pages in the Single-Page-Application.
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    
+    <div className="App">
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Registration />} />
+          {/* Add a Default route landing page later - <Route path="/" element={<Landing />} /> */}
+          {/* Add a default not found page route later <Route path="*" element={<NotFound />} /> */}
+        </Routes>
+      </Router>
+    </div>
+  );
 }
 
-export default App
+export default App;
