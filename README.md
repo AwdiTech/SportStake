@@ -19,7 +19,7 @@ After the installation is complete, you can start the development server by runn
 npm run dev
 ```
 
-This will start the project and you can access it in your browser at `http://localhost:3000`.
+This will start the project and you can access it in your browser at `http://localhost:5173`.
 
 ## Plugins
 
