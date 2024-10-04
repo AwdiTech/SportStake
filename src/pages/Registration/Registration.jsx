@@ -2,7 +2,8 @@ import { useState } from 'react';
 import './Registration.scss';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../FirebaseConfig';
+import {set,ref} from 'firebase/database'
+import { auth,db } from '../../FirebaseConfig';
 export default function Registration() {
 
     const navigate = useNavigate();
@@ -25,7 +26,10 @@ export default function Registration() {
                 // Signed in
                 const user = userCredential.user;
 
-                // Next actions here...
+                // Next actions here..
+               const userRef = ref(db,'users/'+email)
+                 set(userRef,{'points':500})
+               
                 console.log(user);
                 //Example: go to profile page after registration - `navigate("/profile")`
                 // ...
