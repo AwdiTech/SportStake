@@ -1,0 +1,42 @@
+.matchList {
+    background:  rgba(30, 60, 165, 0.4);
+    border-radius: 15px;
+    padding: 2rem;
+   
+    color: rgb(255, 255, 255);}
+
+    .titleCell{
+    color:white;
+    font-weight:bold;
+    font-size: 20px;
+    
+    }
+    .matchCell{
+        position: relative;
+        color:white;
+        font: weight 2%;;
+        font-size: 18px;
+        padding-right: 60px;
+    }
+    .matchCell:after {
+        content: '';
+        height: 100%; //You can change this if you want smaller/bigger borders
+        width: 1px;
+        
+        position: absolute;
+        right: 0;
+        top: 0; // If you want to set a smaller height and center it, change this value
+        
+        background-color: rgba(128,128,128,0.3); // The color of your border
+      }
+    .bodyCell{
+        color:white;
+        font: weight 2%;;
+        font-size: 18px;
+        }
+    .table {
+        background: linear-gradient(135deg, #096b16 30%, #103a96 100%);
+        border-radius: 5px;
+        padding: 2rem;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.4);
+        color: rgb(255, 255, 255);}

@@ -84,12 +84,21 @@ export default function Navbar() {
           </MenuItem>
           <MenuItem
             onClick={() => {
+              navigate(`/matchList`);
+              handleClose();
+            }}
+          >
+            Matches
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
               navigate(`/profile/${auth.currentUser?.uid}`);
               handleClose();
             }}
           >
             Profile
           </MenuItem>
+          
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </Toolbar>
