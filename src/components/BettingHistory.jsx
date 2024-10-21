@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+//import { ref, child, get } from "firebase/database";
+//import { db, auth } from "../../FirebaseConfig";
 
 const sampleBettingHistory = [
   {
@@ -55,6 +57,7 @@ const sampleBettingHistory = [
 const BettingHistory = () => {
   const [expandedBet, setExpandedBet] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  //const [bettingHistory, setBettingHistory] = useState([]);
   const itemsPerPage = 2;
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -63,6 +66,41 @@ const BettingHistory = () => {
     indexOfFirstItem,
     indexOfLastItem
   );
+  //const currentItems = bettingHistory.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Fetch the user's betting history from Firebase Realtime Database
+  //   useEffect(() => {
+  //     const fetchBettingHistory = async () => {
+  //       try {
+  //         const userId = auth.currentUser?.uid;
+  //         if (!userId) {
+  //           console.log("No user is logged in");
+  //           return;
+  //         }
+
+  //         const dbRef = ref(db);
+  //         const snapshot = await get(
+  //           child(dbRef, `users/${userId}/bettingHistory`)
+  //         );
+
+  //         if (snapshot.exists()) {
+  //           const data = snapshot.val();
+  //           // Convert the object to an array to be able to map it
+  //           const formattedData = Object.keys(data).map((betId) => ({
+  //             betId,
+  //             ...data[betId],
+  //           }));
+  //           setBettingHistory(formattedData);
+  //         } else {
+  //           console.log("No betting history found");
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching betting history:", error);
+  //       }
+  //     };
+
+  //     fetchBettingHistory();
+  //   }, []);
 
   const handleExpandClick = (betId) => {
     setExpandedBet(expandedBet === betId ? null : betId);
