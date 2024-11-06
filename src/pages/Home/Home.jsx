@@ -1,9 +1,11 @@
 import { Container, Typography, Box, Grid } from "@mui/material";
 import { FaFutbol } from "react-icons/fa";
+// import APITester from "../../components/APITester"; // To use API Tester, uncomment the APITester component, and check console on this home page.
 
 export default function Home() {
   return (
     <Container maxWidth="lg" className="home">
+      {/* <APITester /> */}
       {/* Welcome Section */}
       <Box textAlign="center" my={5}>
         <FaFutbol size={50} color="green" />
