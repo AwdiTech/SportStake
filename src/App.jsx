@@ -8,19 +8,30 @@ import MatchList from "./pages/MatchList/MatchList";
 import Login from "./pages/Login/Login";
 import Registration from "./pages/Registration/Registration";
 import Profile from "./pages/Profile/Profile";
-import { auth } from "./FirebaseConfig";
+import { auth, db } from "./FirebaseConfig";
+import { get, ref } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth"; // Import the auth state change listener
+import HelpButton from "./components/HelpButton";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null); // Store auth state
+  const [isAdmin, setIsAdmin] = useState(false); // Admin state
 
   useEffect(() => {
     // Listen for authentication state changes
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setIsLoggedIn(true); // User is logged in
+        // Fetch user details from Firebase
+        const dbRef = ref(db, `users/${user.uid}`);
+        const snapshot = await get(dbRef);
+        if (snapshot.exists()) {
+          const userData = snapshot.val();
+          setIsAdmin(userData.isAdmin || false); // Determine admin status
+        }
       } else {
         setIsLoggedIn(false); // User is logged out
+        setIsAdmin(false);
       }
     });
 
@@ -41,6 +52,7 @@ function App() {
     <div className="App">
       <Router>
         {isLoggedIn && <Navbar />}
+        {!isAdmin && isLoggedIn && <HelpButton />}
         <Routes>
           {/* decide to navigate to home page or user profile page later */}
           <Route path="/" element={isLoggedIn ? <Home /> : <Login />} />
