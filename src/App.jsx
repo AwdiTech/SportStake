@@ -5,6 +5,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home/Home";
 import MatchList from "./pages/MatchList/MatchList";
+import AdminMessage from "./pages/Admin/adminMessage.jsx"
 import Login from "./pages/Login/Login";
 import Registration from "./pages/Registration/Registration";
 import Profile from "./pages/Profile/Profile";
@@ -59,6 +60,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <MatchList />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/adminMessage"
+            element={
+              <ProtectedRoute>
+                <AdminMessage />
               </ProtectedRoute>
             }
           />

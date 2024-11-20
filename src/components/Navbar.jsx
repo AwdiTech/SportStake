@@ -92,6 +92,14 @@ export default function Navbar() {
           </MenuItem>
           <MenuItem
             onClick={() => {
+              navigate(`/adminMessage`);
+              handleClose();
+            }}
+          >
+            Admin
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
               navigate(`/profile/${auth.currentUser?.uid}`);
               handleClose();
             }}
