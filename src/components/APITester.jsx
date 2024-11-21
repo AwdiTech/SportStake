@@ -8,7 +8,8 @@ import {
     getUpcomingGamesWithOdds,
     getPlayerGoalScorers,
     getTotalsOdds,
-    getBttsOdds
+    getBttsOdds,
+    getHistoricalOdds,
 } from '../api/api'; // Ensure this points to your api.js file
 
 const APITester = () => {
@@ -55,6 +56,14 @@ const APITester = () => {
                 //     totalsOdds,
                 //     bttsOdds,
                 // });
+
+                // Old game b52655dd4e42aacd0e7281126f97b437
+                const historicalData = await getHistoricalOdds(
+                    "soccer_epl", // Example sport key
+                    "b52655dd4e42aacd0e7281126f97b437", // Finished game ID
+                );
+                console.log('Historical Odds:', historicalData);
+
             } catch (error) {
                 console.error('Error fetching API data:', error);
             }

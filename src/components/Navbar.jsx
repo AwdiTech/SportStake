@@ -106,6 +106,15 @@ export default function Navbar() {
           >
             Profile
           </MenuItem>
+
+          <MenuItem
+            onClick={() => {
+              navigate(`/leaderboard`);
+              handleClose();
+            }}
+          >
+            Leaderboard
+          </MenuItem>
           
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>

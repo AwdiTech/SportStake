@@ -258,6 +258,23 @@ export const getBttsOdds = async (eventId, sportKey = DEFAULT_SPORT, region = 'u
 };
 
 
+/**
+ * Fetches historical odds for a specific event at a specified date and time.
+ *
+ * @param {string} sportKey - The key of the sport to fetch historical data for (e.g., "soccer_epl").
+ * @param {string} eventId - The event ID for the game.
+ * @param {string} date - The ISO8601 timestamp for the historical snapshot (e.g., "2023-10-10T12:15:00Z").
+ * @param {string} [region='us'] - The region to fetch odds from.
+ * @param {string} [markets='h2h'] - The type of markets to fetch odds for (default to head-to-head).
+ * @returns {Promise<Object>} - The historical odds data for the specified event.
+ */
+export const getHistoricalOdds = async (sportKey, eventId, region = 'us', markets = 'h2h') => {
+    const date = "2024-11-06T12:15:00Z"; // Use the bet timestamp to get relevant historical odds
+    const endpoint = `/historical/sports/${sportKey}/events/${eventId}/odds`;
+    return fetchData(endpoint, { date, regions: region, markets });
+};
+
+
 export default {
     getSports,
     getOdds,
@@ -267,10 +284,8 @@ export default {
     getPlayerGoalScorers,
     getTotalsOdds,
     getBttsOdds,
+    getHistoricalOdds,
 };
-
-
-
 // ------------------ HELPER FUNCTIONS ------------------
 
 // This function takes the array of odds and calculates the average of the values.
@@ -308,4 +323,3 @@ const formatMarketOdds = (data, marketKey) => {
         point: bet.point,
     }));
 };
-

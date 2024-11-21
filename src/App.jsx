@@ -9,6 +9,7 @@ import AdminMessage from "./pages/Admin/adminMessage.jsx"
 import Login from "./pages/Login/Login";
 import Registration from "./pages/Registration/Registration";
 import Profile from "./pages/Profile/Profile";
+import Leaderboard from "./pages/Leaderboard/Leaderboard.jsx";
 import { auth, db } from "./FirebaseConfig";
 import { get, ref } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth"; // Import the auth state change listener
@@ -89,6 +90,12 @@ function App() {
               <ProtectedRoute>
                 <Profile />
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/leaderboard"
+            element={
+              <Leaderboard />
             }
           />
           {/* Add a default not found page route later <Route path="*" element={<NotFound />} /> */}
