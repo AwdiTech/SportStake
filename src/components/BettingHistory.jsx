@@ -118,7 +118,10 @@ const BettingHistory = () => {
       <List>
         {currentItems.map((bet) => (
           <Box key={bet.betId} mb={2}>
-            <ListItem button onClick={() => handleExpandClick(bet.betId)}>
+            <ListItem
+              button="false"
+              onClick={() => handleExpandClick(bet.betId)}
+            >
               <ListItemText
                 primary={`${bet.matchTeams}`}
                 secondary={`Bet Type: ${bet.betType} | Date: ${bet.matchDate} | Result: ${bet.result}`}
