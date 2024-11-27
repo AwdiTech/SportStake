@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import {
   AppBar,
@@ -11,7 +12,7 @@ import { AccountCircle } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../FirebaseConfig";
 
-export default function Navbar() {
+export default function Navbar({ isAdmin }) {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null); // For dropdown positioning
   const open = Boolean(anchorEl);
@@ -74,39 +75,59 @@ export default function Navbar() {
           open={open}
           onClose={handleClose}
         >
-          <MenuItem
-            onClick={() => {
-              navigate("/home");
-              handleClose();
-            }}
-          >
-            Home
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              navigate(`/matchList`);
-              handleClose();
-            }}
-          >
-            Matches
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              navigate(`/adminMessage`);
-              handleClose();
-            }}
-          >
-            Admin
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              navigate(`/profile/${auth.currentUser?.uid}`);
-              handleClose();
-            }}
-          >
-            Profile
-          </MenuItem>
-          
+          {/* Common items */}
+          {!isAdmin && (
+            <>
+              <MenuItem
+                onClick={() => {
+                  navigate("/home");
+                  handleClose();
+                }}
+              >
+                Home
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  navigate(`/matchList`);
+                  handleClose();
+                }}
+              >
+                Matches
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  navigate(`/profile/${auth.currentUser?.uid}`);
+                  handleClose();
+                }}
+              >
+                Profile
+              </MenuItem>
+            </>
+          )}
+
+          {/* Admin-only items */}
+          {isAdmin && (
+            <>
+              <MenuItem
+                onClick={() => {
+                  navigate(`/adminMessage`);
+                  handleClose();
+                }}
+              >
+                Help Desk
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  navigate(`/stats`);
+                  handleClose();
+                }}
+              >
+                Stats
+              </MenuItem>
+            </>
+          )}
+
+          {/* Logout */}
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </Toolbar>
