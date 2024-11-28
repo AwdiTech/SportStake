@@ -59,7 +59,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        {isLoggedIn && <Navbar isAdmin={true} />}
+        {isLoggedIn && <Navbar isAdmin={isAdmin} />}
         {!isAdmin && isLoggedIn && <HelpButton />}
         <Routes>
           {/* Admin routes */}
