@@ -1,15 +1,21 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home/Home";
 import MatchList from "./pages/MatchList/MatchList";
-import AdminMessage from "./pages/Admin/adminMessage.jsx"
+import AdminMessage from "./pages/Admin/adminMessage.jsx";
 import Login from "./pages/Login/Login";
 import Registration from "./pages/Registration/Registration";
 import Profile from "./pages/Profile/Profile";
 import Leaderboard from "./pages/Leaderboard/Leaderboard.jsx";
+import Stats from "./pages/Stats/Stats";
 import { auth, db } from "./FirebaseConfig";
 import { get, ref } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth"; // Import the auth state change listener
@@ -53,52 +59,73 @@ function App() {
   return (
     <div className="App">
       <Router>
-        {isLoggedIn && <Navbar />}
+        {isLoggedIn && <Navbar isAdmin={true} />}
         {!isAdmin && isLoggedIn && <HelpButton />}
         <Routes>
-          {/* decide to navigate to home page or user profile page later */}
-          <Route path="/" element={isLoggedIn ? <Home /> : <Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Registration />} />
-          <Route
-            path="/home"
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/matchList"
-            element={
-              <ProtectedRoute>
-                <MatchList />
-              </ProtectedRoute>
-            }
-          />
-           <Route
-            path="/adminMessage"
-            element={
-              <ProtectedRoute>
-                <AdminMessage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile/:id"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/leaderboard"
-            element={
-              <Leaderboard />
-            }
-          />
-          {/* Add a default not found page route later <Route path="*" element={<NotFound />} /> */}
+          {/* Admin routes */}
+          {isAdmin && (
+            <>
+              <Route
+                path="/adminMessage"
+                element={
+                  <ProtectedRoute>
+                    <AdminMessage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/stats"
+                element={
+                  <ProtectedRoute>
+                    <Stats />
+                  </ProtectedRoute>
+                }
+              />
+              {/* Redirect non-admin routes to adminMessage for admins */}
+              <Route path="*" element={<Navigate to="/adminMessage" />} />
+            </>
+          )}
+
+          {/* Non-admin routes */}
+          {!isAdmin && (
+            <>
+              <Route path="/" element={isLoggedIn ? <Home /> : <Login />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Registration />} />
+              <Route
+                path="/home"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/matchList"
+                element={
+                  <ProtectedRoute>
+                    <MatchList />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile/:id"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/leaderboard"
+                element={
+                  <Leaderboard />
+                }
+              />
+              {/* Redirect admin-only routes to Home for non-admins */}
+              <Route path="*" element={<Navigate to="/home" />} />
+            </>
+          )}
         </Routes>
       </Router>
     </div>
