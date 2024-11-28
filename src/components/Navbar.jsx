@@ -132,7 +132,17 @@ export default function Navbar({ isAdmin }) {
               >
                 Stats
               </MenuItem>
+
+              <MenuItem
+                onClick={() => {
+                  navigate(`/AdminConsole`);
+                  handleClose();
+                }}
+              >
+                AdminConsole
+              </MenuItem>
             </>
+
           )}
 
           {/* Logout */}
