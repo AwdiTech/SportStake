@@ -11,7 +11,6 @@ import {
 import { AccountCircle } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../FirebaseConfig";
-import { numberUsers } from "../helperMethods/APIDatabase";
 
 export default function Navbar({ isAdmin }) {
   const navigate = useNavigate();
@@ -33,14 +32,11 @@ export default function Navbar({ isAdmin }) {
     auth
       .signOut()
       .then(() => {
-        
-        numberUsers(false);
         navigate("/login");
       })
       .catch((error) => {
         console.error("Error logging out:", error);
       });
-      
     handleClose(); // Close the dropdown after logout
   };
 
