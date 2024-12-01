@@ -6,7 +6,7 @@ import { FaFutbol } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { getUpcomingGamesWithOdds } from "../../api/api";
 import "./MatchList.scss";
-import { getUpcomingGamesWithOdds } from "../../api/api";
+
 
 export default function MatchList() {
 
