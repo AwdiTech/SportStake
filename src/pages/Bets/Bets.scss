@@ -1,6 +1,12 @@
 .tables {
   margin-top: 0.4rem;
   margin-bottom: 0.4rem;
+  border-radius: 5px;
+  padding: 2rem;
+}
+
+.tablecell {
+  color: white;
 }
 
 .bet-tablecell:hover {
@@ -9,4 +15,9 @@
 
 .highlight {
   font-weight: bold;
+}
+
+.paper {
+  border-radius: 15px;
+  padding: 2rem;
 }

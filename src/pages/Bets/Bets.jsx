@@ -1,4 +1,4 @@
-import { Table, TableHead, TableBody, TableCell, TableRow, Card, Paper, CardContent, Typography, TableContainer } from "@mui/material";
+import { Table, TableHead, TableBody, TableCell, TableRow, Card, Paper, CardContent, Typography, TableContainer, Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getEventOdds, getTotalsOdds, getBttsOdds, getPlayerGoalScorers } from "../../api/api";
 import { useParams } from "react-router-dom";
@@ -42,7 +42,7 @@ export default function Bets() {
         </CardContent>
       </Card>
       <br />
-      <Paper>
+      <Paper className="paper">
         <Table className="tables">
           <TableHead>
             <TableRow>
@@ -74,8 +74,6 @@ export default function Bets() {
             </TableRow>
           </TableBody>
         </Table>
-      </Paper>
-      <Paper>
         <Table className="tables">
           <TableHead>
             <TableRow>
@@ -98,9 +96,6 @@ export default function Bets() {
             </TableRow>
           </TableBody>
         </Table>
-      </Paper>
-
-      <Paper>
         <Table className="tables">
           <TableHead>
             <TableRow>
@@ -120,71 +115,72 @@ export default function Bets() {
             </TableRow>
           </TableBody>
         </Table>
+
+        {isLoading ? null : (
+          <div>
+            <TableContainer sx={{ maxHeight: 340 }}>
+              <Table className="tables" stickyHeader size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell className="tablecell">Player To Score</TableCell>
+                    <TableCell className="tablecell">Anytime</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {playerGoalScorers.playerMarkets
+                    .find((market) => market.marketType === "player_goal_scorer_anytime")
+                    .players.map((player) => (
+                      <TableRow key={player.player}>
+                        <TableCell className="tablecell">{player.player}</TableCell>
+                        <TableCell className="bet-tablecell">{player.bets[0].odds}</TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TableContainer sx={{ maxHeight: 340 }}>
+              <Table className="tables" stickyHeader size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell className="tablecell">Player To Score</TableCell>
+                    <TableCell className="tablecell">First</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {playerGoalScorers.playerMarkets
+                    .find((market) => market.marketType === "player_first_goal_scorer")
+                    .players.map((player) => (
+                      <TableRow key={player.player}>
+                        <TableCell className="tablecell">{player.player}</TableCell>
+                        <TableCell className="bet-tablecell">{player.bets[0].odds}</TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TableContainer sx={{ maxHeight: 340 }}>
+              <Table className="tables" stickyHeader size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell className="tablecell">Player To Score</TableCell>
+                    <TableCell className="tablecell">Last</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {playerGoalScorers.playerMarkets
+                    .find((market) => market.marketType === "player_last_goal_scorer")
+                    .players.map((player) => (
+                      <TableRow key={player.player}>
+                        <TableCell className="tablecell">{player.player}</TableCell>
+                        <TableCell className="bet-tablecell">{player.bets[0].odds}</TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </div>
+        )}
       </Paper>
-      {isLoading ? null : (
-        <Paper>
-          <TableContainer sx={{ maxHeight: 340 }}>
-            <Table className="tables" stickyHeader size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell className="tablecell">Player To Score</TableCell>
-                  <TableCell className="tablecell">Anytime</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {playerGoalScorers.playerMarkets
-                  .find((market) => market.marketType === "player_goal_scorer_anytime")
-                  .players.map((player) => (
-                    <TableRow key={player.player}>
-                      <TableCell className="tablecell">{player.player}</TableCell>
-                      <TableCell className="bet-tablecell">{player.bets[0].odds}</TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TableContainer sx={{ maxHeight: 340 }}>
-            <Table className="tables" stickyHeader size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell className="tablecell">Player To Score</TableCell>
-                  <TableCell className="tablecell">First</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {playerGoalScorers.playerMarkets
-                  .find((market) => market.marketType === "player_first_goal_scorer")
-                  .players.map((player) => (
-                    <TableRow key={player.player}>
-                      <TableCell className="tablecell">{player.player}</TableCell>
-                      <TableCell className="bet-tablecell">{player.bets[0].odds}</TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TableContainer sx={{ maxHeight: 340 }}>
-            <Table className="tables" stickyHeader size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell className="tablecell">Player To Score</TableCell>
-                  <TableCell className="tablecell">Last</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {playerGoalScorers.playerMarkets
-                  .find((market) => market.marketType === "player_last_goal_scorer")
-                  .players.map((player) => (
-                    <TableRow key={player.player}>
-                      <TableCell className="tablecell">{player.player}</TableCell>
-                      <TableCell className="bet-tablecell">{player.bets[0].odds}</TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Paper>
-      )}
     </div>
   );
 }
