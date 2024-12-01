@@ -32,7 +32,8 @@ export default function Registration() {
         const user = userCredential.user;
 
         // Next actions here..
-        createUser(user.uid);
+        const userRef = ref(db, "users/" + user.uid);
+        set(userRef, { points: 500 });
 
         console.log(user);
         //Example: go to profile page after registration - `navigate("/profile")`

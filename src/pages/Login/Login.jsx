@@ -12,7 +12,6 @@ import {
   Alert,
 } from "@mui/material";
 import { FaFutbol } from "react-icons/fa";
-import { numberUsers } from "../../helperMethods/APIDatabase";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -26,7 +25,6 @@ export default function Login() {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        numberUsers(true);
         navigate("/home");
         console.log(user);
       })
