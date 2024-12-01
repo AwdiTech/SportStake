@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // Will be moving these to a .env file in the future
-const API_KEY = "4f81d9f1031a2f8c552e7b94cedabc8e"; // The Odds API Key - Free tier
+const API_KEY = "f24afeb396a5c87bbc89e05d0d231dbf"; // The Odds API Key - Free tier
 const BASE_URL = "https://api.the-odds-api.com/v4"; // The Odds API base URL
 const DEFAULT_SPORT = "soccer_epl"; // Default sport for testing (soccer - English Premier League)
 
