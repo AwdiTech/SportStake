@@ -11,8 +11,9 @@ import {
 } from "@mui/material";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-//import { ref, child, get } from "firebase/database";
-//import { db, auth } from "../../FirebaseConfig";
+import { ref, child, get } from "firebase/database";
+import { db, auth } from "../../FirebaseConfig";
+import { updateBet } from "../helperMethods/APIDatabase";
 
 const sampleBettingHistory = [
   {
@@ -66,41 +67,70 @@ const BettingHistory = () => {
     indexOfFirstItem,
     indexOfLastItem
   );
+
   //const currentItems = bettingHistory.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Fetch the user's betting history from Firebase Realtime Database
-  //   useEffect(() => {
-  //     const fetchBettingHistory = async () => {
-  //       try {
-  //         const userId = auth.currentUser?.uid;
-  //         if (!userId) {
-  //           console.log("No user is logged in");
-  //           return;
-  //         }
+  //Fetch the user's betting history from Firebase Realtime Database
+    useEffect(() => {
+      const fetchBettingHistory = async () => {
+        try {
+          const userId = auth.currentUser?.uid;
+          if (!userId) {
+            console.log("No user is logged in");
+            return;
+          }
 
-  //         const dbRef = ref(db);
-  //         const snapshot = await get(
-  //           child(dbRef, `users/${userId}/bettingHistory`)
-  //         );
+          const dbRef = ref(db);
+          const snapshot = await get(
+            child(dbRef, `users/${userId}/bets`)
+          );
 
-  //         if (snapshot.exists()) {
-  //           const data = snapshot.val();
-  //           // Convert the object to an array to be able to map it
-  //           const formattedData = Object.keys(data).map((betId) => ({
-  //             betId,
-  //             ...data[betId],
-  //           }));
-  //           setBettingHistory(formattedData);
-  //         } else {
-  //           console.log("No betting history found");
-  //         }
-  //       } catch (error) {
-  //         console.error("Error fetching betting history:", error);
-  //       }
-  //     };
+          if (snapshot.exists()) {
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, "0");
+            var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+            var yyyy = today.getFullYear();
+            today = mm + "/" + dd + "/" + yyyy;
+            snapshot.forEach((bet) => {
+            var matchDate = new Date( Date.parse(bet.child('matchDate').val()));
+            var dd = String(matchDate.getDate()).padStart(2, "0");
+            var mm = String(matchDate.getMonth() + 1).padStart(2, "0"); //January is 0!
+            var yyyy = matchDate.getFullYear();
+            matchDate = mm + "/" + dd + "/" + yyyy;
+              if(matchDate < today ){
+               var win = Math.random(2)
+               var homeScore = Math.random(6)
+              var awayScore = Math.random(6)
+              var result = homeScore + "-"+awayScore;
+              updateBet(userId,bet.child(betId),win,result);
+               
+              }
 
-  //     fetchBettingHistory();
-  //   }, []);
+            });
+
+             snapshot = await get(
+             child(dbRef, `users/${userId}/bets`)
+            );
+            const data = snapshot.val();
+
+            
+            // Convert the object to an array to be able to map it
+            const formattedData = Object.keys(data).map((betId) => ({
+              betId,
+              ...data[betId],
+            }));
+            
+            setBettingHistory(formattedData);
+          } else {
+            console.log("No betting history found");
+          }
+        } catch (error) {
+          console.error("Error fetching betting history:", error);
+        }
+      };
+
+      fetchBettingHistory();
+    }, []);
 
   const handleExpandClick = (betId) => {
     setExpandedBet(expandedBet === betId ? null : betId);
