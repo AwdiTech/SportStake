@@ -114,27 +114,22 @@ export default function MatchList() {
 
             </TableHead>
             <TableBody>
-              {matchData.map((data) => (
-                <TableRow key={data.eventId} onClick={() => navToDetails(data.eventId)}>
-                  <TableCell sx={{ color: "white", fontSize: 14, fontWeight: 400 }}>
-                    <div>{data.commenceTime}</div>
-                  </TableCell>
-                  <TableCell className="matchCell" sx={{ color: "white", fontSize: 18, fontWeight: 400, paddingRight: 13 }}>
-                    {data.homeTeam} VS {data.awayTeam}{" "}
-                  </TableCell>
+                {matchData.map((data,index)=>(
+                    <TableRow 
+                    key ={index}
+                    onClick={()=>navToDetails(data.id)}
+                    >
+                        <TableCell sx={{color:"white",fontSize:14 ,fontWeight:400}} ><div>{data.date}</div> {data.time} </TableCell>
+                        <TableCell className="matchCell" sx={{color:"white",fontSize:18 ,fontWeight:400, paddingRight:13}}  >{data.team1} VS {data.team2} </TableCell>
+                       
+                        <TableCell sx={{color:"orange",fontSize:18 ,fontWeight:400, paddingLeft:4}}> {data.homeWin}</TableCell>
+                        <TableCell sx={{color:"orange",fontSize:18 ,fontWeight:400}}>{data.tie}</TableCell>
+                        <TableCell sx={{color:"orange",fontSize:18 ,fontWeight:400}}>{data.awayWin}</TableCell>
 
-                  <TableCell sx={{ color: "orange", fontSize: 18, fontWeight: 400, paddingLeft: 4 }}>
-                    {" "}
-                    {data.h2hOdds.find((odd) => odd.name === data.homeTeam).price}
-                  </TableCell>
-                  <TableCell sx={{ color: "orange", fontSize: 18, fontWeight: 400 }}>
-                    {data.h2hOdds.find((odd) => odd.name === "Draw").price}
-                  </TableCell>
-                  <TableCell sx={{ color: "orange", fontSize: 18, fontWeight: 400 }}>
-                    {data.h2hOdds.find((odd) => odd.name === data.awayTeam).price}
-                  </TableCell>
-                </TableRow>
-              ))}
+                    </TableRow>
+                
+                ))}
+
             </TableBody>
           </Table>
         </TableContainer>
