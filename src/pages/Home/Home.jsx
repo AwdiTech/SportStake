@@ -37,14 +37,20 @@ export default function Home() {
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={4}>
             <Box p={3} border={1} borderRadius={2} textAlign="center">
-              <Typography variant="h6">Team A vs Team B</Typography>
-              <Typography variant="body2">Score: 2-1</Typography>
+              <Typography variant="h6">Liverpool vs Man City</Typography>
+              <Typography variant="body2">Score: 2-0</Typography>
             </Box>
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <Box p={3} border={1} borderRadius={2} textAlign="center">
-              <Typography variant="h6">Team C vs Team D</Typography>
-              <Typography variant="body2">Score: 0-0</Typography>
+              <Typography variant="h6">Chelsea vs Aston Villa</Typography>
+              <Typography variant="body2">Score: 3-0</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <Box p={3} border={1} borderRadius={2} textAlign="center">
+              <Typography variant="h6">Tottenham vs Fulham</Typography>
+              <Typography variant="body2">Score: 1-1</Typography>
             </Box>
           </Grid>
           {/* Add more matches as needed */}
