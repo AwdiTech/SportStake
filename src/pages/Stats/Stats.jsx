@@ -37,6 +37,7 @@ const Stats = () => {
     netProfit,
   } = sampleData;
 
+  
   return (
     <Box p={4}>
       <Typography variant="h4" gutterBottom>
