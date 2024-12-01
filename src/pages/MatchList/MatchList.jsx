@@ -12,7 +12,7 @@ export default function MatchList() {
   useEffect(() => {
     let fetchData = async () => {
       let data = await getUpcomingGamesWithOdds();
-      console.log(data);
+      //console.log(data);
       setMatchData(data);
     };
 

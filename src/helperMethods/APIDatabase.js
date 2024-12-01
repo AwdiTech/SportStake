@@ -1,5 +1,5 @@
 import { db } from "../FirebaseConfig";
-import { ref, get, child, update } from "firebase/database";
+import { ref, get, child, update, set } from "firebase/database";
 /**
  * Create User
  * Create Bet
