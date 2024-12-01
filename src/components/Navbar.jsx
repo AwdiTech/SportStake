@@ -108,6 +108,14 @@ export default function Navbar({ isAdmin }) {
               </MenuItem>
             </>
           )}
+          <MenuItem
+            onClick={() => {
+              navigate(`/leaderboard`);
+              handleClose();
+            }}
+          >
+            Leaderboard
+          </MenuItem>
 
           {/* Admin-only items */}
           {isAdmin && (
@@ -128,7 +136,17 @@ export default function Navbar({ isAdmin }) {
               >
                 Stats
               </MenuItem>
+
+              <MenuItem
+                onClick={() => {
+                  navigate(`/AdminConsole`);
+                  handleClose();
+                }}
+              >
+                AdminConsole
+              </MenuItem>
             </>
+
           )}
 
           {/* Logout */}

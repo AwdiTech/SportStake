@@ -1,11 +1,10 @@
 // api.js - The Odds API integration using Axios
-import axios from 'axios';
+import axios from "axios";
 
 // Will be moving these to a .env file in the future
-const API_KEY = '4ae353ebf3c5df433e45e7b806269017'; // The Odds API Key - Free tier
-const BASE_URL = 'https://api.the-odds-api.com/v4'; // The Odds API base URL
-const DEFAULT_SPORT = 'soccer_epl'; // Default sport for testing (soccer - English Premier League)
-
+const API_KEY = "4f81d9f1031a2f8c552e7b94cedabc8e"; // The Odds API Key - Free tier
+const BASE_URL = "https://api.the-odds-api.com/v4"; // The Odds API base URL
+const DEFAULT_SPORT = "soccer_epl"; // Default sport for testing (soccer - English Premier League)
 
 /**
  * Fetches data from a specified endpoint using TheOddsAPI and Axios for easier HTTP requests.
@@ -16,17 +15,16 @@ const DEFAULT_SPORT = 'soccer_epl'; // Default sport for testing (soccer - Engli
  * @returns {Promise<Object|null>} - A promise that resolves to the response data, or null if an error occurs.
  */
 const fetchData = async (endpoint, params = {}) => {
-    try {
-        const response = await axios.get(`${BASE_URL}${endpoint}`, {
-            params: { apiKey: API_KEY, ...params },
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching data from TheOddsAPI:', error);
-        return null;
-    }
+  try {
+    const response = await axios.get(`${BASE_URL}${endpoint}`, {
+      params: { apiKey: API_KEY, ...params },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data from TheOddsAPI:", error);
+    return null;
+  }
 };
-
 
 /**
  * Fetches the list of all sports available from TheOddsAPI.
@@ -35,8 +33,7 @@ const fetchData = async (endpoint, params = {}) => {
  * @function getSports
  * @returns {Promise<Object>} A promise that resolves to the list of sports.
  */
-export const getSports = async () => fetchData('/sports');
-
+export const getSports = async () => fetchData("/sports");
 
 /**
  * Fetches the odds available for a given sport.
@@ -46,14 +43,13 @@ export const getSports = async () => fetchData('/sports');
  * @param {string} [markets='h2h'] - The type of markets to fetch odds for.
  * @returns {Promise<Object>} A promise that resolves to the fetched odds data.
  */
-export const getOdds = async (sportKey = DEFAULT_SPORT, region = 'us', markets = 'h2h') =>
-    fetchData(`/sports/${sportKey}/odds`, {
-        regions: region,
-        markets: markets,
-    });
+export const getOdds = async (sportKey = DEFAULT_SPORT, region = "us", markets = "h2h") =>
+  fetchData(`/sports/${sportKey}/odds`, {
+    regions: region,
+    markets: markets,
+  });
 
-
-    /**
+/**
  * Fetches the odds for a specific event.
  *
  * @param {string} eventId - The ID of the event.
@@ -62,13 +58,11 @@ export const getOdds = async (sportKey = DEFAULT_SPORT, region = 'us', markets =
  * @param {string} [markets='h2h'] - The markets for the odds (default is 'h2h').
  * @returns {Promise<Object>} A promise that resolves to the odds data for the event.
  */
-export const getEventOdds = async (eventId, sportKey = DEFAULT_SPORT, region = 'us', markets = 'h2h') =>
-    fetchData(`/sports/${sportKey}/events/${eventId}/odds`, {
-        regions: region,
-        markets: markets,
-    });
-
-
+export const getEventOdds = async (eventId, sportKey = DEFAULT_SPORT, region = "us", markets = "h2h") =>
+  fetchData(`/sports/${sportKey}/events/${eventId}/odds`, {
+    regions: region,
+    markets: markets,
+  });
 
 // Get scores for ongoing and completed events
 /**
@@ -79,12 +73,9 @@ export const getEventOdds = async (eventId, sportKey = DEFAULT_SPORT, region = '
  * @returns {Promise<Object>} A promise that resolves to the fetched scores data.
  */
 export const getScores = async (sportKey = DEFAULT_SPORT, daysFrom = 1) =>
-    fetchData(`/sports/${sportKey}/scores`, {
-        daysFrom: daysFrom,
-    });
-
-
-
+  fetchData(`/sports/${sportKey}/scores`, {
+    daysFrom: daysFrom,
+  });
 
 /**
  * Fetches upcoming games with odds for a specified sport using the sport key id.
@@ -99,24 +90,23 @@ export const getScores = async (sportKey = DEFAULT_SPORT, daysFrom = 1) =>
  * @property {Array<Object>} h2hOdds - The head-to-head odds for the event.
  * @property {string} commenceTime - The commencement time of the event.
  */
-export const getUpcomingGamesWithOdds = async (sportKey = DEFAULT_SPORT, region = 'us', markets = 'h2h') => {
-    const data = await fetchData(`/sports/${sportKey}/odds`, {
-        regions: region,
-        markets: markets,
-    });
+export const getUpcomingGamesWithOdds = async (sportKey = DEFAULT_SPORT, region = "us", markets = "h2h") => {
+  const data = await fetchData(`/sports/${sportKey}/odds`, {
+    regions: region,
+    markets: markets,
+  });
 
-    if (!data) return [];
+  if (!data) return [];
 
-    // Formating the raw data to return Home Team, Away Team, and h2h Odds
-    return data.map(event => ({
-        eventId: event.id,
-        homeTeam: event.home_team,
-        awayTeam: event.away_team,
-        h2hOdds: event.bookmakers?.at(0).markets?.at(0).outcomes || null, // Just returning the first bookmaker's odds if available for simplicity
-        commenceTime: event.commence_time,
-    }));
+  // Formating the raw data to return Home Team, Away Team, and h2h Odds
+  return data.map((event) => ({
+    eventId: event.id,
+    homeTeam: event.home_team,
+    awayTeam: event.away_team,
+    h2hOdds: event.bookmakers?.at(0).markets?.at(0).outcomes || null, // Just returning the first bookmaker's odds if available for simplicity
+    commenceTime: event.commence_time,
+  }));
 };
-
 
 /**
  * Fetches and processes player goal scorer odds for a given event and returns a formatted object with player markets and odds.
@@ -138,75 +128,75 @@ export const getUpcomingGamesWithOdds = async (sportKey = DEFAULT_SPORT, region 
  * @property {number} playerMarkets.players.bets.odds - The averaged odds for the bet type.
  * @property {number|null} playerMarkets.players.bets.point - The point value for the bet type, if applicable.
  */
-export const getPlayerGoalScorers = async (eventId, sportKey = DEFAULT_SPORT, region = 'us') => {
-    const allPlayerMarketsString = 'player_goal_scorer_anytime,player_first_goal_scorer,player_last_goal_scorer,player_shots_on_target,player_shots,player_assists'; // All player markets we'll need to fetch
-    const data = await getEventOdds(eventId, sportKey, region, allPlayerMarketsString);
+export const getPlayerGoalScorers = async (eventId, sportKey = DEFAULT_SPORT, region = "us") => {
+  const allPlayerMarketsString =
+    "player_goal_scorer_anytime,player_first_goal_scorer,player_last_goal_scorer,player_shots_on_target,player_shots,player_assists"; // All player markets we'll need to fetch
+  const data = await getEventOdds(eventId, sportKey, region, allPlayerMarketsString);
 
-    if (!data || !data.bookmakers) return [];
+  if (!data || !data.bookmakers) return [];
 
-    const marketMap = new Map();
+  const marketMap = new Map();
 
-    // Iterate through bookmakers to group odds by market type and player name
-    data.bookmakers.forEach((bookmaker) => {
-        bookmaker.markets.forEach((market) => {
-            const marketKey = market.key;
+  // Iterate through bookmakers to group odds by market type and player name
+  data.bookmakers.forEach((bookmaker) => {
+    bookmaker.markets.forEach((market) => {
+      const marketKey = market.key;
 
-            if (!marketMap.has(marketKey)) {
-                marketMap.set(marketKey, new Map()); // Store players by name within each market
-            }
+      if (!marketMap.has(marketKey)) {
+        marketMap.set(marketKey, new Map()); // Store players by name within each market
+      }
 
-            market.outcomes.forEach((outcome) => {
-                const playerName = outcome.description;
-                const odds = outcome.price;
-                const betType = outcome.name; // Example: 'Yes', 'Over', 'Under'
-                const point = outcome.point || null;
+      market.outcomes.forEach((outcome) => {
+        const playerName = outcome.description;
+        const odds = outcome.price;
+        const betType = outcome.name; // Example: 'Yes', 'Over', 'Under'
+        const point = outcome.point || null;
 
-                const playerMap = marketMap.get(marketKey);
+        const playerMap = marketMap.get(marketKey);
 
-                if (!playerMap.has(playerName)) {
-                    playerMap.set(playerName, []);
-                }
+        if (!playerMap.has(playerName)) {
+          playerMap.set(playerName, []);
+        }
 
-                // Add the odds to the player's list for this market
-                playerMap.get(playerName).push({ type: betType, odds, point });
-            });
-        });
+        // Add the odds to the player's list for this market
+        playerMap.get(playerName).push({ type: betType, odds, point });
+      });
     });
+  });
 
-    // Format the output by averaging odds for each player in every market
-    const formattedMarkets = Array.from(marketMap.entries()).map(([marketType, players]) => ({
-        marketType,
-        players: Array.from(players.entries()).map(([playerName, bets]) => ({
-            player: playerName,
-            bets: Object.values(
-                bets.reduce((acc, bet) => {
-                    const { type, odds, point } = bet;
-            
-                    if (!acc[type]) {
-                        acc[type] = { type, odds: [], point };
-                    }
-            
-                    acc[type].odds.push(odds); // Collect odds for this type into an array
-            
-                    return acc;
-                }, {})
-            ).map((betGroup) => ({
-                type: betGroup.type,
-                odds: calculateAverageOdds(betGroup.odds), // Average the odds using the array of odds from different bookmakers
-                point: betGroup.point,
-            })),
-        })),            
-    }));
+  // Format the output by averaging odds for each player in every market
+  const formattedMarkets = Array.from(marketMap.entries()).map(([marketType, players]) => ({
+    marketType,
+    players: Array.from(players.entries()).map(([playerName, bets]) => ({
+      player: playerName,
+      bets: Object.values(
+        bets.reduce((acc, bet) => {
+          const { type, odds, point } = bet;
 
-    return {
-        eventId: data.id,
-        homeTeam: data.home_team,
-        awayTeam: data.away_team,
-        commenceTime: data.commence_time,
-        playerMarkets: formattedMarkets,
-    };
+          if (!acc[type]) {
+            acc[type] = { type, odds: [], point };
+          }
+
+          acc[type].odds.push(odds); // Collect odds for this type into an array
+
+          return acc;
+        }, {})
+      ).map((betGroup) => ({
+        type: betGroup.type,
+        odds: calculateAverageOdds(betGroup.odds), // Average the odds using the array of odds from different bookmakers
+        point: betGroup.point,
+      })),
+    })),
+  }));
+
+  return {
+    eventId: data.id,
+    homeTeam: data.home_team,
+    awayTeam: data.away_team,
+    commenceTime: data.commence_time,
+    playerMarkets: formattedMarkets,
+  };
 };
-
 
 /**
  * Fetches the total goal/score odds for a given event.
@@ -221,17 +211,16 @@ export const getPlayerGoalScorers = async (eventId, sportKey = DEFAULT_SPORT, re
  * @returns {string} return.commenceTime - The commencement time of the event.
  * @returns {Object} return.totals - The formatted total odds for the event.
  */
-export const getTotalsOdds = async (eventId, sportKey = DEFAULT_SPORT, region = 'us') => {
-    const data = await getEventOdds(eventId, sportKey, region, 'totals');
-    return {
-        eventId: data.id,
-        homeTeam: data.home_team,
-        awayTeam: data.away_team,
-        commenceTime: data.commence_time,
-        totals: formatMarketOdds(data, 'totals'),
-    };
+export const getTotalsOdds = async (eventId, sportKey = DEFAULT_SPORT, region = "us") => {
+  const data = await getEventOdds(eventId, sportKey, region, "totals");
+  return {
+    eventId: data.id,
+    homeTeam: data.home_team,
+    awayTeam: data.away_team,
+    commenceTime: data.commence_time,
+    totals: formatMarketOdds(data, "totals"),
+  };
 };
-
 
 /**
  * Fetches Both Teams To Score (BTTS) odds for a given event.
@@ -246,66 +235,77 @@ export const getTotalsOdds = async (eventId, sportKey = DEFAULT_SPORT, region = 
  * @property {string} commenceTime - The start time of the event.
  * @property {Object} btts - The formatted BTTS odds.
  */
-export const getBttsOdds = async (eventId, sportKey = DEFAULT_SPORT, region = 'us') => {
-    const data = await getEventOdds(eventId, sportKey, region, 'btts');
-    return {
-        eventId: data.id,
-        homeTeam: data.home_team,
-        awayTeam: data.away_team,
-        commenceTime: data.commence_time,
-        btts: formatMarketOdds(data, 'btts'),
-    };
+export const getBttsOdds = async (eventId, sportKey = DEFAULT_SPORT, region = "us") => {
+  const data = await getEventOdds(eventId, sportKey, region, "btts");
+  return {
+    eventId: data.id,
+    homeTeam: data.home_team,
+    awayTeam: data.away_team,
+    commenceTime: data.commence_time,
+    btts: formatMarketOdds(data, "btts"),
+  };
 };
 
+/**
+ * Fetches historical odds for a specific event at a specified date and time.
+ *
+ * @param {string} sportKey - The key of the sport to fetch historical data for (e.g., "soccer_epl").
+ * @param {string} eventId - The event ID for the game.
+ * @param {string} date - The ISO8601 timestamp for the historical snapshot (e.g., "2023-10-10T12:15:00Z").
+ * @param {string} [region='us'] - The region to fetch odds from.
+ * @param {string} [markets='h2h'] - The type of markets to fetch odds for (default to head-to-head).
+ * @returns {Promise<Object>} - The historical odds data for the specified event.
+ */
+export const getHistoricalOdds = async (sportKey, eventId, region = "us", markets = "h2h") => {
+  const date = "2024-11-06T12:15:00Z"; // Use the bet timestamp to get relevant historical odds
+  const endpoint = `/historical/sports/${sportKey}/events/${eventId}/odds`;
+  return fetchData(endpoint, { date, regions: region, markets });
+};
 
 export default {
-    getSports,
-    getOdds,
-    getEventOdds,
-    getScores,
-    getUpcomingGamesWithOdds,
-    getPlayerGoalScorers,
-    getTotalsOdds,
-    getBttsOdds,
+  getSports,
+  getOdds,
+  getEventOdds,
+  getScores,
+  getUpcomingGamesWithOdds,
+  getPlayerGoalScorers,
+  getTotalsOdds,
+  getBttsOdds,
+  getHistoricalOdds,
 };
-
-
-
 // ------------------ HELPER FUNCTIONS ------------------
 
 // This function takes the array of odds and calculates the average of the values.
-const calculateAverageOdds = (oddsArray) =>
-    (oddsArray.reduce((acc, val) => acc + val, 0) / oddsArray.length).toFixed(2);
+const calculateAverageOdds = (oddsArray) => (oddsArray.reduce((acc, val) => acc + val, 0) / oddsArray.length).toFixed(2);
 
 // Helper to extract and format data for each market type
 const formatMarketOdds = (data, marketKey) => {
-    if (!data || !data.bookmakers) return [];
+  if (!data || !data.bookmakers) return [];
 
-    const marketMap = new Map();
+  const marketMap = new Map();
 
-    // Iterate through each bookmaker to gather market outcomes
-    data.bookmakers.forEach((bookmaker) => {
-        const market = bookmaker.markets.find((m) => m.key === marketKey);
+  // Iterate through each bookmaker to gather market outcomes
+  data.bookmakers.forEach((bookmaker) => {
+    const market = bookmaker.markets.find((m) => m.key === marketKey);
 
-        if (market) {
-            market.outcomes.forEach((outcome) => {
-                const betType = outcome.name; // Over, Under, Yes, No
-                const point = outcome.point || null;
-                const odds = outcome.price;
+    if (market) {
+      market.outcomes.forEach((outcome) => {
+        const betType = outcome.name; // Over, Under, Yes, No
+        const point = outcome.point || null;
+        const odds = outcome.price;
 
-                const existingBet = marketMap.get(betType + point) || { odds: [], point, type: betType };
+        const existingBet = marketMap.get(betType + point) || { odds: [], point, type: betType };
 
-                existingBet.odds.push(odds);
-                marketMap.set(betType + point, existingBet);
-            });
-        }
-    });
+        existingBet.odds.push(odds);
+        marketMap.set(betType + point, existingBet);
+      });
+    }
+  });
 
-    // Format the data by averaging odds and returning organized outcomes
-    return Array.from(marketMap.values()).map((bet) => ({
-        type: bet.type,
-        odds: calculateAverageOdds(bet.odds),
-        point: bet.point,
-    }));
+  // Format the data by averaging odds and returning organized outcomes
+  return Array.from(marketMap.values()).map((bet) => ({
+    type: bet.type,
+    odds: calculateAverageOdds(bet.odds),
+    point: bet.point,
+  }));
 };
-

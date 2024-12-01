@@ -1,11 +1,6 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home/Home";
@@ -14,11 +9,14 @@ import AdminMessage from "./pages/Admin/adminMessage.jsx";
 import Login from "./pages/Login/Login";
 import Registration from "./pages/Registration/Registration";
 import Profile from "./pages/Profile/Profile";
+import Leaderboard from "./pages/Leaderboard/Leaderboard.jsx";
 import Stats from "./pages/Stats/Stats";
 import { auth, db } from "./FirebaseConfig";
 import { get, ref } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth"; // Import the auth state change listener
 import HelpButton from "./components/HelpButton";
+import AdminConsole from "./pages/AdminConsole/AdminConsole.jsx";
+import Bets from "./pages/Bets/Bets.jsx";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null); // Store auth state
@@ -80,6 +78,14 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route
+                path="/AdminConsole"
+                element={
+                  <ProtectedRoute>
+                    <AdminConsole />
+                  </ProtectedRoute>
+                }
+              />
               {/* Redirect non-admin routes to adminMessage for admins */}
               <Route path="*" element={<Navigate to="/adminMessage" />} />
             </>
@@ -108,6 +114,14 @@ function App() {
                 }
               />
               <Route
+                path="/matchDetails/:eventId"
+                element={
+                  <ProtectedRoute>
+                    <Bets />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/profile/:id"
                 element={
                   <ProtectedRoute>
@@ -119,6 +133,8 @@ function App() {
               <Route path="*" element={<Navigate to="/home" />} />
             </>
           )}
+
+          <Route path="/leaderboard" element={<Leaderboard />} />
         </Routes>
       </Router>
     </div>

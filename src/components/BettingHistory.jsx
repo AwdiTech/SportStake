@@ -1,3 +1,4 @@
+
 import { useState,useEffect } from "react";
 import {
   Box,
@@ -9,11 +10,15 @@ import {
   Typography,
   Pagination,
 } from "@mui/material";
+
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ref, child, get } from "firebase/database";
 import { db, auth } from "../FirebaseConfig";
+
 import { updateBet } from "../helperMethods/APIDatabase";
+
+
 
 const sampleBettingHistory = [
   {
@@ -63,6 +68,7 @@ const BettingHistory = () => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
   const currentItems = sampleBettingHistory.slice(
     indexOfFirstItem,
     indexOfLastItem
@@ -132,6 +138,7 @@ const BettingHistory = () => {
       fetchBettingHistory();
     }, []);
 
+
   const handleExpandClick = (betId) => {
     setExpandedBet(expandedBet === betId ? null : betId);
   };
@@ -148,39 +155,22 @@ const BettingHistory = () => {
       <List>
         {bettingHistory.map((bet) => (
           <Box key={bet.betId} mb={2}>
-            <ListItem
-              button="false"
-              onClick={() => handleExpandClick(bet.betId)}
-            >
+            <ListItem button="false" onClick={() => handleExpandClick(bet.betId)}>
               <ListItemText
                 primary={`${bet.matchTeams}`}
                 secondary={`Bet Type: ${bet.betType} | Date: ${bet.matchDate} | Result: ${bet.result}`}
               />
               <IconButton onClick={() => handleExpandClick(bet.betId)}>
-                {expandedBet === bet.betId ? (
-                  <ExpandLessIcon />
-                ) : (
-                  <ExpandMoreIcon />
-                )}
+                {expandedBet === bet.betId ? <ExpandLessIcon /> : <ExpandMoreIcon />}
               </IconButton>
             </ListItem>
 
-            <Collapse
-              in={expandedBet === bet.betId}
-              timeout="auto"
-              unmountOnExit
-            >
+            <Collapse in={expandedBet === bet.betId} timeout="auto" unmountOnExit>
               <Box p={2}>
-                <Typography variant="body2">
-                  Bet Amount: {bet.betAmount}
-                </Typography>
+                <Typography variant="body2">Bet Amount: {bet.betAmount}</Typography>
                 <Typography variant="body2">Odds: {bet.betOdds}</Typography>
-                <Typography variant="body2">
-                  Prediction: {bet.betPrediction}
-                </Typography>
-                <Typography variant="body2">
-                  Final Score: {bet.finalScore}
-                </Typography>
+                <Typography variant="body2">Prediction: {bet.betPrediction}</Typography>
+                <Typography variant="body2">Final Score: {bet.finalScore}</Typography>
                 {bet.result === "Won" && (
                   <Typography variant="body2" color="success.main">
                     Winnings: {bet.winnings}
