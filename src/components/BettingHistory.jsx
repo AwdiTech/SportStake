@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import {
   Box,
   List,
@@ -12,7 +12,7 @@ import {
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ref, child, get } from "firebase/database";
-import { db, auth } from "../../FirebaseConfig";
+import { db, auth } from "../FirebaseConfig";
 import { updateBet } from "../helperMethods/APIDatabase";
 
 const sampleBettingHistory = [
@@ -58,7 +58,7 @@ const sampleBettingHistory = [
 const BettingHistory = () => {
   const [expandedBet, setExpandedBet] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  //const [bettingHistory, setBettingHistory] = useState([]);
+  const [bettingHistory, setBettingHistory] = useState([]);
   const itemsPerPage = 2;
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -146,7 +146,7 @@ const BettingHistory = () => {
         Betting History
       </Typography>
       <List>
-        {currentItems.map((bet) => (
+        {bettingHistory.map((bet) => (
           <Box key={bet.betId} mb={2}>
             <ListItem
               button="false"
@@ -194,7 +194,7 @@ const BettingHistory = () => {
 
       {/* Pagination */}
       <Pagination
-        count={Math.ceil(sampleBettingHistory.length / itemsPerPage)}
+        count={Math.ceil(bettingHistory.length / itemsPerPage)}
         page={currentPage}
         onChange={handlePageChange}
         color="primary"
