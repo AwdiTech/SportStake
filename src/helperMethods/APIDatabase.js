@@ -27,18 +27,19 @@ async function createBet(userId, bet) {
   const user = await get(child(dbRef, "users/" + userId));
   const betId = user.child("betsMade").val();
   const points = user.child("betsMade").val();
-  const betRef = ref(db, "users/" + userId + "/bets/" + bet.betId);
-  set(betRef, { betId: betId });
-  set(betRef, { matchTeams: bet.matchTeams });
-  set(betRef, { matchDate: bet.matchDate });
-  set(betRef, { betType: bet.betType });
-  set(betRef, { betAmount: bet.betAmount });
-  set(betRef, { betOdds: bet.betOdds });
-  set(betRef, { betPrediction: bet.betPrediction });
-  set(betRef, { result: "Pending" });
-  set(betRef, { winnings: 0 });
-  set(betRef, { finalScore: "Pending" });
-  update(ref(db, `users/${userId}`), { betsMade: betId + 1 });
+  const newBetId = betId + 1;
+  const betRef = ref(db, "users/" + userId + "/bets/" + newBetId);
+  update(betRef, { betId: newBetId });
+  update(betRef, { matchTeams: bet.matchTeams });
+  update(betRef, { matchDate: bet.matchDate });
+  update(betRef, { betType: bet.betType });
+  update(betRef, { betAmount: bet.betAmount });
+  update(betRef, { betOdds: bet.betOdds });
+  update(betRef, { betPrediction: bet.betPrediction });
+  update(betRef, { result: "Pending" });
+  update(betRef, { winnings: 0 });
+  update(betRef, { finalScore: "Pending" });
+  update(ref(db, `users/${userId}`), { betsMade: newBetId });
   update(ref(db, `users/${userId}`), { points: points - bet.betAmount });
 }
 /**
