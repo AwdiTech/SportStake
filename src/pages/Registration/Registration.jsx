@@ -13,6 +13,7 @@ import {
   Alert,
 } from "@mui/material";
 import { FaFutbol } from "react-icons/fa"; // React Icons for soccer theme
+import { createUser } from "../../helperMethods/APIDatabase";
 
 export default function Registration() {
   const navigate = useNavigate();

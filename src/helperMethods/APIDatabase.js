@@ -13,7 +13,7 @@ import { ref, get, child, update, set } from "firebase/database";
  */
 async function createUser(userId) {
   const refStats = ref(db, "stats/");
-  const stats = await get(child(dbRef, "stats"));
+  const stats = await get(child(ref(db), "stats"));
   const numUsers = stats.child("totalUsers").val();
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, "0");
@@ -21,11 +21,11 @@ async function createUser(userId) {
   var yyyy = today.getFullYear();
   today = mm + "/" + dd + "/" + yyyy;
   const userRef = ref(db, "users/" + userId);
-  set(userRef, { points: 500 });
-  set(userRef, { betsMade: 0 });
-  set(userRef, { dateCreated: today });
-  set(userRef, { win: 0 });
-  set(userRef, { loss: 0 });
+  update(userRef, { points: 500 });
+  update(userRef, { betsMade: 0 });
+  update(userRef, { dateCreated: today });
+  update(userRef, { win: 0 });
+  update(userRef, { loss: 0 });
 
   update(refStats, { totalUsers: numUsers + 1 });
 }
@@ -56,12 +56,12 @@ async function createBet(userId, bet) {
 
   const avgBetAmount = stats.child("avgBetAmount").val();
   const newAvgBetAmount =
-    (avgBetAmount * totalBets + bet.betAmount) / totalBets;
+    (avgBetAmount * totalBets + bet.betAmount) / totalBets + 1;
   const user = await get(child(dbRef, "users/" + userId));
   const betId = user.child("betsMade").val() + 1;
   const points = user.child("points").val();
   const betRef = ref(db, "users/" + userId + "/bets/" + betId);
-  update(betRef, { betId: totalBets + 1 });
+  update(betRef, { betId: betId });
   update(betRef, { matchTeams: bet.matchTeams });
   update(betRef, { matchDate: bet.matchDate });
   update(betRef, { betType: bet.betType });
@@ -72,9 +72,9 @@ async function createBet(userId, bet) {
   update(betRef, { winnings: 0 });
   update(betRef, { finalScore: "Pending" });
   update(statRef, { totalBets: totalBets + 1 });
-  update(statRef, { totalRevenue: totalRevenue + bet.betAmount });
+  update(statRef, { totalRevenue: totalRevenue + bet.betAmount + 1 });
   update(statRef, { avgBetAmount: newAvgBetAmount });
-  update(ref(db, `users/${userId}`), { betsMade: totalBets + 1 });
+  update(ref(db, `users/${userId}`), { betsMade: betId });
   update(ref(db, `users/${userId}`), { points: points - bet.betAmount });
 }
 /**
@@ -191,16 +191,19 @@ async function getReports() {
 function pastFiveDays() {
   var last5Days = [];
 
-  var today = new Date();
+  const today = new Date();
+  const getDate = today.getDate();
+
   for (let i = 0; i < 5; i++) {
-    today.setDate(today.getDate() - i);
-    var dd = String(today.getDate()).padStart(2, "0");
+    today.setDate(getDate - i);
+    var dd = String(getDate).padStart(2, "0");
     var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
     var yyyy = today.getFullYear();
-    today = mm + "/" + dd + "/" + yyyy;
+    let newtoday = mm + "/" + dd + "/" + yyyy;
 
-    last5Days[i] = today;
+    last5Days[i] = newtoday;
   }
+  return last5Days;
 }
 
 export { createUser, createBet, updateBet, getReports, numberUsers, getStats };

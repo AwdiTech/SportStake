@@ -7,8 +7,10 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/material";
+import { useEffect,useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import InfoIcon from "@mui/icons-material/Info";
+import { getStats } from "../../helperMethods/APIDatabase";
 
 const sampleData = {
   totalUsers: 1500,
@@ -25,18 +27,27 @@ const sampleData = {
 const COLORS = ["#4caf50", "#f44336"]; // Colors for pie chart
 
 const Stats = () => {
-  const {
-    totalUsers,
-    activeUsers,
-    newUsers,
-    totalBets,
-    avgBetAmount,
-    betsByResult,
-    totalRevenue,
-    payouts,
-    netProfit,
-  } = sampleData;
-
+  const [stats, setStats] = useState({ totalUsers: 0,
+    activeUsers: 0,
+    newUsers: [0, 0, 0, 0, 0], // Weekly new users (sample)
+    totalBets: 0,
+    avgBetAmount: 0,
+    betsByResult: { won: 0, lost: 0 }, // Percentage
+    totalRevenue: 0,
+    payouts: 0,
+    netProfit: 0,});
+  useEffect(()=>{
+    
+    async function fetchData() {
+      
+      await getStats().then((value)=>
+        setStats(value)
+      )
+      
+      }
+     
+     console.log(fetchData());
+   },[])
   
   return (
     <Box p={4}>
@@ -49,7 +60,7 @@ const Stats = () => {
           <Card>
             <CardContent>
               <Typography variant="h6">Total Users</Typography>
-              <Typography variant="h4">{totalUsers}</Typography>
+              <Typography variant="h4">{stats.totalUsers}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -70,7 +81,7 @@ const Stats = () => {
                   </IconButton>
                 </Tooltip>
               </Typography>
-              <Typography variant="h4">{activeUsers}</Typography>
+              <Typography variant="h4">{stats.activeUsers}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -80,7 +91,7 @@ const Stats = () => {
           <Card>
             <CardContent>
               <Typography variant="h6">Total Bets Placed</Typography>
-              <Typography variant="h4">{totalBets}</Typography>
+              <Typography variant="h4">{stats.totalBets}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -90,7 +101,7 @@ const Stats = () => {
           <Card>
             <CardContent>
               <Typography variant="h6">Average Bet Amount</Typography>
-              <Typography variant="h4">${avgBetAmount}</Typography>
+              <Typography variant="h4">${stats.avgBetAmount}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -103,7 +114,7 @@ const Stats = () => {
               <ResponsiveContainer width="100%" height={200}>
                 <PieChart>
                   <Pie
-                    data={newUsers.map((value, index) => ({
+                    data={stats.newUsers.map((value, index) => ({
                       name: `Week ${index + 1}`,
                       value,
                     }))}
@@ -111,7 +122,7 @@ const Stats = () => {
                     outerRadius={80}
                     label
                   >
-                    {newUsers.map((_, index) => (
+                    {stats.newUsers.map((_, index) => (
                       <Cell
                         key={`cell-${index}`}
                         fill={COLORS[index % COLORS.length]}
@@ -134,8 +145,8 @@ const Stats = () => {
                 <PieChart>
                   <Pie
                     data={[
-                      { name: "Won", value: betsByResult.won },
-                      { name: "Lost", value: betsByResult.lost },
+                      { name: "Won", value: stats.betsByResult.won },
+                      { name: "Lost", value: stats.betsByResult.lost },
                     ]}
                     dataKey="value"
                     outerRadius={80}
@@ -156,7 +167,7 @@ const Stats = () => {
           <Card>
             <CardContent>
               <Typography variant="h6">Total Revenue</Typography>
-              <Typography variant="h4">${totalRevenue}</Typography>
+              <Typography variant="h4">${stats.totalRevenue}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -166,7 +177,7 @@ const Stats = () => {
           <Card>
             <CardContent>
               <Typography variant="h6">Payouts</Typography>
-              <Typography variant="h4">${payouts}</Typography>
+              <Typography variant="h4">${stats.payouts}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -176,7 +187,7 @@ const Stats = () => {
           <Card>
             <CardContent>
               <Typography variant="h6">Net Profit</Typography>
-              <Typography variant="h4">${netProfit}</Typography>
+              <Typography variant="h4">${stats.netProfit}</Typography>
             </CardContent>
           </Card>
         </Grid>
