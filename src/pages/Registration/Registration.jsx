@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Registration.scss";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -16,6 +16,10 @@ import { FaFutbol } from "react-icons/fa"; // React Icons for soccer theme
 
 export default function Registration() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "SportStake - Registration";
+  }, []);
 
   // Form fields...
   const [email, setEmail] = useState("");

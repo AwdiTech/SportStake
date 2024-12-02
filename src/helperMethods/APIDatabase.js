@@ -13,7 +13,7 @@ import { ref, get, child, update, set } from "firebase/database";
  */
 async function createUser(userId) {
   const refStats = ref(db, "stats/");
-  const stats = await get(child(dbRef, "stats"));
+  const stats = await get(child(db, "stats"));
   const numUsers = stats.child("totalUsers").val();
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, "0");
@@ -137,7 +137,7 @@ async function getStats() {
       case past5Days[1]:
         newUsers[1] += 1;
         break;
-      case past5Days[3]:
+      case past5Days[2]:
         newUsers[2] += 1;
         break;
       case past5Days[3]:

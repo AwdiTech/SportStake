@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Table,
   TableHead,
@@ -19,7 +19,12 @@ import {
   Box,
 } from "@mui/material";
 import { auth } from "../../FirebaseConfig";
-import { getEventOdds, getTotalsOdds, getBttsOdds, getPlayerGoalScorers } from "../../api/api";
+import {
+  getEventOdds,
+  getTotalsOdds,
+  getBttsOdds,
+  getPlayerGoalScorers,
+} from "../../api/api";
 import { createBet } from "../../helperMethods/APIDatabase";
 import { useParams } from "react-router-dom";
 import "./Bets.scss";
@@ -37,6 +42,10 @@ export default function Bets() {
   const [betAmount, setBetAmount] = useState("");
 
   const [dateTime, setDateTime] = useState([]);
+
+  useEffect(() => {
+    document.title = "SportStake - Bets";
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -128,13 +137,19 @@ export default function Bets() {
                     type: "Head to Head",
                     betType: "h2h",
                     betPrediction: "Home",
-                    betOdds: h2hOdds.bookmakers[0]?.markets[0]?.outcomes.find((odds) => odds.name === h2hOdds.home_team)?.price,
+                    betOdds: h2hOdds.bookmakers[0]?.markets[0]?.outcomes.find(
+                      (odds) => odds.name === h2hOdds.home_team
+                    )?.price,
                   })
                 }
               >
                 Home:{" "}
                 <span className="highlight">
-                  {isLoading ? "..." : h2hOdds.bookmakers[0]?.markets[0]?.outcomes.find((odds) => odds.name === h2hOdds.home_team)?.price}
+                  {isLoading
+                    ? "..."
+                    : h2hOdds.bookmakers[0]?.markets[0]?.outcomes.find(
+                        (odds) => odds.name === h2hOdds.home_team
+                      )?.price}
                 </span>
               </TableCell>
               <TableCell
@@ -144,13 +159,19 @@ export default function Bets() {
                     type: "Head to Head",
                     betType: "h2h",
                     betPrediction: "Away",
-                    betOdds: h2hOdds.bookmakers[0]?.markets[0]?.outcomes.find((odds) => odds.name === h2hOdds.away_team)?.price,
+                    betOdds: h2hOdds.bookmakers[0]?.markets[0]?.outcomes.find(
+                      (odds) => odds.name === h2hOdds.away_team
+                    )?.price,
                   })
                 }
               >
                 Away:{" "}
                 <span className="highlight">
-                  {isLoading ? "..." : h2hOdds.bookmakers[0]?.markets[0]?.outcomes.find((odds) => odds.name === h2hOdds.away_team)?.price}
+                  {isLoading
+                    ? "..."
+                    : h2hOdds.bookmakers[0]?.markets[0]?.outcomes.find(
+                        (odds) => odds.name === h2hOdds.away_team
+                      )?.price}
                 </span>
               </TableCell>
               <TableCell
@@ -160,13 +181,19 @@ export default function Bets() {
                     type: "Head to Head",
                     betType: "h2h",
                     betPrediction: "Tie",
-                    betOdds: h2hOdds.bookmakers[0]?.markets[0]?.outcomes.find((odds) => odds.name === "Draw")?.price,
+                    betOdds: h2hOdds.bookmakers[0]?.markets[0]?.outcomes.find(
+                      (odds) => odds.name === "Draw"
+                    )?.price,
                   })
                 }
               >
                 Tie:{" "}
                 <span className="highlight">
-                  {isLoading ? "..." : h2hOdds.bookmakers[0]?.markets[0]?.outcomes.find((odds) => odds.name === "Draw")?.price}
+                  {isLoading
+                    ? "..."
+                    : h2hOdds.bookmakers[0]?.markets[0]?.outcomes.find(
+                        (odds) => odds.name === "Draw"
+                      )?.price}
                 </span>
               </TableCell>
             </TableRow>
@@ -185,7 +212,10 @@ export default function Bets() {
           <TableBody>
             <TableRow>
               <TableCell className="tablecell">
-                <span className="highlight">{isLoading ? "..." : overUnderOdds.totals[0].point}</span> Goals
+                <span className="highlight">
+                  {isLoading ? "..." : overUnderOdds.totals[0].point}
+                </span>{" "}
+                Goals
               </TableCell>
               <TableCell
                 className="bet-tablecell"
@@ -198,7 +228,10 @@ export default function Bets() {
                   })
                 }
               >
-                Over: <span className="highlight">{isLoading ? "..." : overUnderOdds.totals[0]?.odds}</span>
+                Over:{" "}
+                <span className="highlight">
+                  {isLoading ? "..." : overUnderOdds.totals[0]?.odds}
+                </span>
               </TableCell>
               <TableCell
                 className="bet-tablecell"
@@ -211,7 +244,10 @@ export default function Bets() {
                   })
                 }
               >
-                Under: <span className="highlight">{isLoading ? "..." : overUnderOdds.totals[1]?.odds}</span>
+                Under:{" "}
+                <span className="highlight">
+                  {isLoading ? "..." : overUnderOdds.totals[1]?.odds}
+                </span>
               </TableCell>
             </TableRow>
           </TableBody>
@@ -235,11 +271,17 @@ export default function Bets() {
                     type: "Both Teams to Score",
                     betType: "btts",
                     betPrediction: "Yes",
-                    betOdds: bttsOdds.btts?.find((odds) => odds.type === "Yes")?.odds,
+                    betOdds: bttsOdds.btts?.find((odds) => odds.type === "Yes")
+                      ?.odds,
                   })
                 }
               >
-                Yes: <span className="highlight">{isLoading ? "..." : bttsOdds.btts?.find((odds) => odds.type === "Yes")?.odds}</span>
+                Yes:{" "}
+                <span className="highlight">
+                  {isLoading
+                    ? "..."
+                    : bttsOdds.btts?.find((odds) => odds.type === "Yes")?.odds}
+                </span>
               </TableCell>
               <TableCell
                 className="bet-tablecell"
@@ -248,11 +290,17 @@ export default function Bets() {
                     type: "Both Teams to Score",
                     betType: "btts",
                     betPrediction: "No",
-                    betOdds: bttsOdds.btts?.find((odds) => odds.type === "No")?.odds,
+                    betOdds: bttsOdds.btts?.find((odds) => odds.type === "No")
+                      ?.odds,
                   })
                 }
               >
-                No: <span className="highlight">{isLoading ? "..." : bttsOdds.btts?.find((odds) => odds.type === "No")?.odds}</span>
+                No:{" "}
+                <span className="highlight">
+                  {isLoading
+                    ? "..."
+                    : bttsOdds.btts?.find((odds) => odds.type === "No")?.odds}
+                </span>
               </TableCell>
             </TableRow>
           </TableBody>
@@ -269,7 +317,9 @@ export default function Bets() {
             </TableHead>
             <TableBody>
               {playerGoalScorers.playerMarkets
-                ?.find((market) => market.marketType === "player_goal_scorer_anytime")
+                ?.find(
+                  (market) => market.marketType === "player_goal_scorer_anytime"
+                )
                 ?.players.map((player) => (
                   <TableRow
                     key={player.player}
@@ -283,7 +333,9 @@ export default function Bets() {
                     }
                   >
                     <TableCell className="tablecell">{player.player}</TableCell>
-                    <TableCell className="bet-tablecell">{player.bets[0]?.odds}</TableCell>
+                    <TableCell className="bet-tablecell">
+                      {player.bets[0]?.odds}
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
@@ -301,7 +353,9 @@ export default function Bets() {
             </TableHead>
             <TableBody>
               {playerGoalScorers.playerMarkets
-                ?.find((market) => market.marketType === "player_first_goal_scorer")
+                ?.find(
+                  (market) => market.marketType === "player_first_goal_scorer"
+                )
                 ?.players.map((player) => (
                   <TableRow
                     key={player.player}
@@ -315,7 +369,9 @@ export default function Bets() {
                     }
                   >
                     <TableCell className="tablecell">{player.player}</TableCell>
-                    <TableCell className="bet-tablecell">{player.bets[0]?.odds}</TableCell>
+                    <TableCell className="bet-tablecell">
+                      {player.bets[0]?.odds}
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
@@ -333,7 +389,9 @@ export default function Bets() {
             </TableHead>
             <TableBody>
               {playerGoalScorers.playerMarkets
-                ?.find((market) => market.marketType === "player_last_goal_scorer")
+                ?.find(
+                  (market) => market.marketType === "player_last_goal_scorer"
+                )
                 ?.players.map((player) => (
                   <TableRow
                     key={player.player}
@@ -347,7 +405,9 @@ export default function Bets() {
                     }
                   >
                     <TableCell className="tablecell">{player.player}</TableCell>
-                    <TableCell className="bet-tablecell">{player.bets[0]?.odds}</TableCell>
+                    <TableCell className="bet-tablecell">
+                      {player.bets[0]?.odds}
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
@@ -359,11 +419,23 @@ export default function Bets() {
       <Dialog open={openModal} onClose={handleCloseModal}>
         <DialogTitle>Place Bet</DialogTitle>
         <DialogContent>
-          <Typography variant="subtitle1">Bet Type: {selectedBet?.type}</Typography>
-          <Typography variant="subtitle2">Bet Option: {selectedBet?.betPrediction}</Typography>
-          <Typography variant="subtitle2">Odds: {selectedBet?.betOdds}</Typography>
+          <Typography variant="subtitle1">
+            Bet Type: {selectedBet?.type}
+          </Typography>
+          <Typography variant="subtitle2">
+            Bet Option: {selectedBet?.betPrediction}
+          </Typography>
+          <Typography variant="subtitle2">
+            Odds: {selectedBet?.betOdds}
+          </Typography>
           <Box mt={2}>
-            <TextField label="Bet Amount" type="number" fullWidth value={betAmount} onChange={(e) => setBetAmount(e.target.value)} />
+            <TextField
+              label="Bet Amount"
+              type="number"
+              fullWidth
+              value={betAmount}
+              onChange={(e) => setBetAmount(e.target.value)}
+            />
           </Box>
         </DialogContent>
         <DialogActions>
