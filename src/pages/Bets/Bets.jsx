@@ -36,6 +36,8 @@ export default function Bets() {
   const [selectedBet, setSelectedBet] = useState(null);
   const [betAmount, setBetAmount] = useState("");
 
+  const [dateTime, setDateTime] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       let h2hData = await getEventOdds(eventId);
@@ -48,10 +50,23 @@ export default function Bets() {
       setOverUnderOdds(overUnderData);
       setBttsOdds(bttsData);
       setPlayerGoalScorers(playerGoalsData);
+
+      formatDate(h2hData.commence_time);
     };
 
     fetchData();
   }, [eventId]);
+
+  const formatDate = (commence_time) => {
+    var dateTime = commence_time.replace("Z", "").split("T");
+    var time = dateTime[1].split(":");
+    if (parseInt(time[0]) > 12) {
+      dateTime[1] = parseInt(time[0]) - 12 + ":" + time[1] + "pm";
+    } else {
+      dateTime[1] = time[0] + ":" + time[1] + "am";
+    }
+    setDateTime(dateTime);
+  };
 
   const handleOpenModal = (bet) => {
     setSelectedBet(bet);
@@ -88,7 +103,9 @@ export default function Bets() {
           <Typography variant="h4">
             {h2hOdds.home_team} VS {h2hOdds.away_team}
           </Typography>
-          <Typography variant="h6">{h2hOdds.commence_time}</Typography>
+          <Typography variant="h6">
+            {dateTime[0]} {dateTime[1]}
+          </Typography>
         </CardContent>
       </Card>
       <br />
