@@ -1,18 +1,12 @@
 import { Container, Typography, Box, Grid } from "@mui/material";
 import { FaFutbol } from "react-icons/fa";
-import APITester from "../../components/APITester"; // To use API Tester, uncomment the APITester component, and check console on this home page.
 import { useEffect } from "react";
 
 export default function Home() {
-
   // Check and complete wagers if the match is over
   useEffect(() => {
-    // Loop through the betting history, find active bets, and check if the match is over
-    // If the match is over, complete the wager
-
-  });
-
-
+    document.title = "SportStake - Home";
+  }, []);
 
   return (
     <Container maxWidth="lg" className="home">

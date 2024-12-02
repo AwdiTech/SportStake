@@ -118,7 +118,7 @@ export default function Navbar({ isAdmin }) {
             <>
               <MenuItem
                 onClick={() => {
-                  navigate(`/adminMessage`);
+                  navigate(`/helpdesk`);
                   handleClose();
                 }}
               >
@@ -135,14 +135,13 @@ export default function Navbar({ isAdmin }) {
 
               <MenuItem
                 onClick={() => {
-                  navigate(`/AdminConsole`);
+                  navigate(`/adminConsole`);
                   handleClose();
                 }}
               >
-                AdminConsole
+                Admin Console
               </MenuItem>
             </>
-
           )}
 
           {/* Logout */}

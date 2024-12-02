@@ -8,6 +8,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { useEffect } from "react";
 import InfoIcon from "@mui/icons-material/Info";
 
 const sampleData = {
@@ -25,6 +26,10 @@ const sampleData = {
 const COLORS = ["#4caf50", "#f44336"]; // Colors for pie chart
 
 const Stats = () => {
+  useEffect(() => {
+    document.title = "SportStake - Stats";
+  }, []);
+
   const {
     totalUsers,
     activeUsers,
@@ -37,7 +42,6 @@ const Stats = () => {
     netProfit,
   } = sampleData;
 
-  
   return (
     <Box p={4}>
       <Typography variant="h4" gutterBottom>

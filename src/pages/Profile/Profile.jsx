@@ -29,6 +29,10 @@ export default function Profile() {
   const userId = auth.currentUser?.uid;
 
   useEffect(() => {
+    document.title = "SportStake - Profile";
+  }, []);
+
+  useEffect(() => {
     const fetchProfile = async () => {
       const dbRef = ref(db);
       const snapshot = await get(child(dbRef, `users/${userId}`));
