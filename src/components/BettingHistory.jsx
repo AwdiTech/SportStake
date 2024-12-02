@@ -103,7 +103,7 @@ const BettingHistory = () => {
             var mm = String(matchDate.getMonth() + 1).padStart(2, "0"); //January is 0!
             var yyyy = matchDate.getFullYear();
             matchDate = mm + "/" + dd + "/" + yyyy;
-              if(matchDate < today ){
+              if(matchDate < today && bet.child("result").val() == "Pending"){
                var win = Math.random(2)
                var homeScore = Math.random(6)
               var awayScore = Math.random(6)
