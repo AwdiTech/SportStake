@@ -56,7 +56,7 @@ async function createBet(userId, bet) {
 
   const avgBetAmount = stats.child("avgBetAmount").val();
   const newAvgBetAmount =
-    (avgBetAmount * totalBets + bet.betAmount) / totalBets + 1;
+    (avgBetAmount * totalBets + bet.betAmount) / (totalBets + 1);
   const user = await get(child(dbRef, "users/" + userId));
   const betId = user.child("betsMade").val() + 1;
   const points = user.child("points").val();
