@@ -1,6 +1,11 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home/Home";
@@ -13,14 +18,14 @@ import Leaderboard from "./pages/Leaderboard/Leaderboard.jsx";
 import Stats from "./pages/Stats/Stats";
 import { auth, db } from "./FirebaseConfig";
 import { get, ref } from "firebase/database";
-import { onAuthStateChanged } from "firebase/auth"; // Import the auth state change listener
+import { onAuthStateChanged } from "firebase/auth";
 import HelpButton from "./components/HelpButton";
 import AdminConsole from "./pages/AdminConsole/AdminConsole.jsx";
 import Bets from "./pages/Bets/Bets.jsx";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null); // Store auth state
-  const [isAdmin, setIsAdmin] = useState(false); // Admin state
+  const [isAdmin, setIsAdmin] = useState(null); // Admin state
 
   useEffect(() => {
     // Listen for authentication state changes
@@ -45,14 +50,10 @@ function App() {
   }, []);
 
   // Show a loading state while the auth status is being determined
-  if (isLoggedIn === null) {
+  if (isLoggedIn === null || isAdmin === null) {
     return <p>Loading...</p>;
   }
-  // App routing
-  // The `Router` component is the parent component that wraps the `Routes` and `Route` components.
-  // The `Routes` component is a container for multiple `Route` components.
-  // The `Route` component is used to define a route and its corresponding component.
-  // Add more `Route` components to define more pages in the Single-Page-Application.
+
   return (
     <div className="App">
       <Router>
@@ -63,7 +64,7 @@ function App() {
           {isAdmin && (
             <>
               <Route
-                path="/adminMessage"
+                path="/helpdesk"
                 element={
                   <ProtectedRoute>
                     <AdminMessage />
@@ -79,15 +80,16 @@ function App() {
                 }
               />
               <Route
-                path="/AdminConsole"
+                path="/adminConsole"
                 element={
                   <ProtectedRoute>
                     <AdminConsole />
                   </ProtectedRoute>
                 }
               />
-              {/* Redirect non-admin routes to adminMessage for admins */}
-              <Route path="*" element={<Navigate to="/adminMessage" />} />
+              {/* Redirect "/" and "/home" to /adminMessage for admins */}
+              <Route path="/" element={<Navigate to="/helpdesk" />} />
+              <Route path="/home" element={<Navigate to="/helpdesk" />} />
             </>
           )}
 
@@ -134,6 +136,7 @@ function App() {
             </>
           )}
 
+          {/* Common route for all users */}
           <Route path="/leaderboard" element={<Leaderboard />} />
         </Routes>
       </Router>

@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useEffect,useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+
 import InfoIcon from "@mui/icons-material/Info";
 import { getStats } from "../../helperMethods/APIDatabase";
 
@@ -27,6 +28,7 @@ const sampleData = {
 const COLORS = ["#4caf50", "#f44336"]; // Colors for pie chart
 
 const Stats = () => {
+
   const [stats, setStats] = useState({ totalUsers: 0,
     activeUsers: 0,
     newUsers: [0, 0, 0, 0, 0], // Weekly new users (sample)
@@ -49,6 +51,7 @@ const Stats = () => {
      console.log(fetchData());
    },[])
   
+
   return (
     <Box p={4}>
       <Typography variant="h4" gutterBottom>

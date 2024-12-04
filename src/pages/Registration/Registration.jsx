@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Registration.scss";
 import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { set, ref } from "firebase/database";
-import { auth, db } from "../../FirebaseConfig";
+import { createUser } from "../../helperMethods/APIDatabase";
+import { auth } from "../../FirebaseConfig";
 import {
   TextField,
   Button,
@@ -17,6 +17,10 @@ import { createUser } from "../../helperMethods/APIDatabase";
 
 export default function Registration() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "SportStake - Registration";
+  }, []);
 
   // Form fields...
   const [email, setEmail] = useState("");
