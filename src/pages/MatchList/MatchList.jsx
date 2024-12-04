@@ -86,10 +86,9 @@ export default function MatchList() {
         <Typography variant="h4" component="h1" gutterBottom>
           SportStake
         </Typography>
-        <Typography gutterBottom>Live and upcoming Matches</Typography>
       </Box>
       <Typography variant="h5" gutterBottom>
-        Upcoming Matches
+        Live and Upcoming Matches
       </Typography>
       <Box my={5} className="matchList">
         <TableContainer style={{ maxHeight: 400 }}>
