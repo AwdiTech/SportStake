@@ -1,14 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Modal, TextField, Typography, Fab, Button } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { push, ref } from "firebase/database";
+import { push, ref, get } from "firebase/database";
 import { db, auth } from "../FirebaseConfig";
 
 const HelpButton = () => {
   const [open, setOpen] = useState(false);
   const [helpRequest, setHelpRequest] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    // Fetch the username from Firebase when the component loads
+    const userId = auth.currentUser?.uid;
+    if (userId) {
+      const userRef = ref(db, `users/${userId}`);
+      get(userRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          setUsername(snapshot.val().username);
+        }
+      });
+    }
+  }, []);
 
   const handleOpen = () => {
     setOpen(true);
@@ -27,6 +41,7 @@ const HelpButton = () => {
     // Save help request to Firebase
     const helpRequestData = {
       userId,
+      username,
       content: helpRequest,
       timestamp: new Date().toISOString(),
       status: "open",

@@ -131,13 +131,13 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path="/leaderboard" element={<Leaderboard />} />
               {/* Redirect admin-only routes to Home for non-admins */}
               <Route path="*" element={<Navigate to="/home" />} />
             </>
           )}
 
           {/* Common route for all users */}
-          <Route path="/leaderboard" element={<Leaderboard />} />
         </Routes>
       </Router>
     </div>

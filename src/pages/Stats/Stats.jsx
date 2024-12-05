@@ -7,50 +7,75 @@ import {
   IconButton,
   Tooltip,
 } from "@mui/material";
-import { useEffect,useState } from "react";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { useEffect, useState } from "react";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip as RechartTooltip,
+  Legend,
+} from "recharts";
 
 import InfoIcon from "@mui/icons-material/Info";
-import { getStats } from "../../helperMethods/APIDatabase";
-
-const sampleData = {
-  totalUsers: 1500,
-  activeUsers: 420,
-  newUsers: [25, 30, 45, 60, 70], // Weekly new users (sample)
-  totalBets: 3200,
-  avgBetAmount: 75.5,
-  betsByResult: { won: 65, lost: 35 }, // Percentage
-  totalRevenue: 240000,
-  payouts: 175000,
-  netProfit: 65000,
-};
+//import { getStats } from "../../helperMethods/APIDatabase";
 
 const COLORS = ["#4caf50", "#f44336"]; // Colors for pie chart
+const USERCOLORS = ["#ffeb3b", "#2196f3", "#9c27b0", "#ff9800", "#00bcd4"];
+
+// Function to generate week labels for the past 5 weeks
+const generateWeekLabels = () => {
+  const labels = [];
+  const currentDate = new Date();
+
+  // Get to the current Monday of this week
+  const currentDay = currentDate.getDay();
+  const mondayOffset = currentDay === 0 ? -6 : 1 - currentDay; // Sunday case handled (-6 to get to Monday)
+  const currentMonday = new Date(currentDate);
+  currentMonday.setDate(currentDate.getDate() + mondayOffset);
+
+  for (let i = 0; i < 5; i++) {
+    const startOfWeek = new Date(currentMonday);
+    startOfWeek.setDate(currentMonday.getDate() - i * 7);
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+    const label = `${startOfWeek.toLocaleString("default", {
+      month: "short",
+    })} ${startOfWeek.getDate()} - ${endOfWeek.toLocaleString("default", {
+      month: "short",
+    })} ${endOfWeek.getDate()}`;
+
+    labels.unshift(label);
+  }
+
+  return labels;
+};
 
 const Stats = () => {
+  // Sample Data based on provided information
+  const [stats, setStats] = useState({
+    totalUsers: 9,
+    activeUsers: 5,
+    newUsers: [0, 0, 1, 2, 2], // Weekly new users
+    totalBets: 16,
+    avgBetAmount: 50.5,
+    betsByResult: { won: 9, lost: 6 },
+    avgPointsPerUser: 543,
+    pointsEarned: 724.8,
+    pointsLost: 303,
+  });
 
-  const [stats, setStats] = useState({ totalUsers: 0,
-    activeUsers: 0,
-    newUsers: [0, 0, 0, 0, 0], // Weekly new users (sample)
-    totalBets: 0,
-    avgBetAmount: 0,
-    betsByResult: { won: 0, lost: 0 }, // Percentage
-    totalRevenue: 0,
-    payouts: 0,
-    netProfit: 0,});
-  useEffect(()=>{
-    
-    async function fetchData() {
-      
-      await getStats().then((value)=>
-        setStats(value)
-      )
-      
-      }
-     
-     console.log(fetchData());
-   },[])
-  
+  // Generate labels for each week
+  const weekLabels = generateWeekLabels();
+
+  useEffect(() => {
+    // Since we are using sample data, no need to fetch from API
+  }, []);
+
+  // Custom label renderer for the "New Users" pie chart, showing only the value
+  const renderValueLabel = ({ value }) => value;
 
   return (
     <Box p={4}>
@@ -93,7 +118,14 @@ const Stats = () => {
         <Grid item xs={12} sm={6} md={3}>
           <Card>
             <CardContent>
-              <Typography variant="h6">Total Bets Placed</Typography>
+              <Typography variant="h6">
+                Total Bets Placed
+                <Tooltip title="Including pending bets." placement="top" arrow>
+                  <IconButton size="small" sx={{ ml: 1 }}>
+                    <InfoIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              </Typography>
               <Typography variant="h4">{stats.totalBets}</Typography>
             </CardContent>
           </Card>
@@ -114,25 +146,25 @@ const Stats = () => {
           <Card>
             <CardContent>
               <Typography variant="h6">New Users (Last 5 Weeks)</Typography>
-              <ResponsiveContainer width="100%" height={200}>
+              <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie
                     data={stats.newUsers.map((value, index) => ({
-                      name: `Week ${index + 1}`,
+                      name: weekLabels[index],
                       value,
                     }))}
                     dataKey="value"
                     outerRadius={80}
-                    label
+                    label={renderValueLabel} // Use only the value as the label
                   >
                     {stats.newUsers.map((_, index) => (
                       <Cell
                         key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
+                        fill={USERCOLORS[index % USERCOLORS.length]}
                       />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <RechartTooltip />
                 </PieChart>
               </ResponsiveContainer>
             </CardContent>
@@ -144,7 +176,7 @@ const Stats = () => {
           <Card>
             <CardContent>
               <Typography variant="h6">Bets by Result</Typography>
-              <ResponsiveContainer width="100%" height={200}>
+              <ResponsiveContainer width="100%" height={250}>
                 <PieChart>
                   <Pie
                     data={[
@@ -153,44 +185,48 @@ const Stats = () => {
                     ]}
                     dataKey="value"
                     outerRadius={80}
-                    label
+                    label={renderValueLabel} // Show only the value as the label
+                    labelLine={false}
                   >
                     <Cell fill={COLORS[0]} />
                     <Cell fill={COLORS[1]} />
                   </Pie>
-                  <Tooltip />
+                  <RechartTooltip />
+                  <Legend verticalAlign="bottom" height={36} />
                 </PieChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
         </Grid>
 
-        {/* Total Revenue */}
+        {/* Average Points per User */}
         <Grid item xs={12} sm={6} md={4}>
           <Card>
             <CardContent>
-              <Typography variant="h6">Total Revenue</Typography>
-              <Typography variant="h4">${stats.totalRevenue}</Typography>
+              <Typography variant="h6">Average Points per User</Typography>
+              <Typography variant="h4">${stats.avgPointsPerUser}</Typography>
             </CardContent>
           </Card>
         </Grid>
 
-        {/* Payouts */}
+        {/* Points Earned through Betting */}
         <Grid item xs={12} sm={6} md={4}>
           <Card>
             <CardContent>
-              <Typography variant="h6">Payouts</Typography>
-              <Typography variant="h4">${stats.payouts}</Typography>
+              <Typography variant="h6">
+                Points Earned through Betting
+              </Typography>
+              <Typography variant="h4">${stats.pointsEarned}</Typography>
             </CardContent>
           </Card>
         </Grid>
 
-        {/* Net Profit */}
+        {/* Points Lost in Bets */}
         <Grid item xs={12} sm={6} md={4}>
           <Card>
             <CardContent>
-              <Typography variant="h6">Net Profit</Typography>
-              <Typography variant="h4">${stats.netProfit}</Typography>
+              <Typography variant="h6">Points Lost in Bets</Typography>
+              <Typography variant="h4">${stats.pointsLost}</Typography>
             </CardContent>
           </Card>
         </Grid>

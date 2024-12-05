@@ -27,6 +27,7 @@ export default function AdminMessage() {
     open: false,
     reports: [],
     reportId: "",
+    username: "",
   });
 
   useEffect(() => {
@@ -34,46 +35,60 @@ export default function AdminMessage() {
   }, []);
 
   useEffect(() => {
-    var reports;
     async function fetchData() {
-      reports = await getReports();
-      setUserRequest({
+      const reports = await getReports();
+      setUserRequest((prev) => ({
+        ...prev,
         reports: reports,
-        open: userRequest.open,
-        reportId: userRequest.reportId,
-      });
+      }));
     }
     fetchData();
+  }, []);
 
-    console.log(userRequest);
-  }, [userRequest]);
-  const { open, reports, reportId } = userRequest;
+  const { open, reports, reportId, username } = userRequest;
+
   const handleClose = () => {
     update(ref(db, `helpRequests/${reportId}`), { status: "closed" });
 
     async function fetchData() {
-      var reports = await getReports();
+      const reports = await getReports();
       setUserRequest({
         reports: reports,
         open: false,
         reportId: "",
+        username: "",
       });
     }
     fetchData();
   };
+
   const handleNo = () => {
-    setUserRequest({
-      reports: userRequest.reports,
+    setUserRequest((prev) => ({
+      ...prev,
       open: false,
-      reportId: userRequest.reportId,
-    });
+    }));
   };
-  function toDetails(Id) {
-    setUserRequest({
-      reports: userRequest.reports,
+
+  function toDetails(Id, username) {
+    setUserRequest((prev) => ({
+      ...prev,
       open: true,
       reportId: Id,
-    });
+      username: username,
+    }));
+  }
+
+  function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    return `${date.getFullYear()}-${(date.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")} ${date
+      .getHours()
+      .toString()
+      .padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}:${date
+      .getSeconds()
+      .toString()
+      .padStart(2, "0")}`;
   }
 
   return (
@@ -93,32 +108,42 @@ export default function AdminMessage() {
             <TableHead>
               <TableRow>
                 <TableCell
-                  sx={{ color: "white", fontSize: 20, fontWeight: 650 }}
+                  sx={{
+                    color: "white",
+                    fontSize: 20,
+                    fontWeight: 650,
+                    width: "20%",
+                  }}
                 >
                   Date
                 </TableCell>
-
                 <TableCell
                   sx={{ color: "white", fontSize: 20, fontWeight: 650 }}
                 >
                   Content
                 </TableCell>
-
                 <TableCell
                   sx={{ color: "white", fontSize: 20, fontWeight: 650 }}
                 >
                   UserID
                 </TableCell>
+                <TableCell
+                  sx={{ color: "white", fontSize: 20, fontWeight: 650 }}
+                >
+                  Username
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {reports.map((data, index) => (
-                <TableRow key={index} onClick={() => toDetails(data.id)}>
+                <TableRow
+                  key={index}
+                  onClick={() => toDetails(data.id, data.username)}
+                >
                   <TableCell
                     sx={{ color: "white", fontSize: 18, fontWeight: 400 }}
                   >
-                    {" "}
-                    {data.timestamp}
+                    {formatDate(data.timestamp)}
                   </TableCell>
                   <TableCell
                     sx={{ color: "white", fontSize: 18, fontWeight: 400 }}
@@ -129,6 +154,11 @@ export default function AdminMessage() {
                     sx={{ color: "white", fontSize: 18, fontWeight: 400 }}
                   >
                     {data.userId}
+                  </TableCell>
+                  <TableCell
+                    sx={{ color: "white", fontSize: 18, fontWeight: 400 }}
+                  >
+                    {data.username}
                   </TableCell>
                 </TableRow>
               ))}
@@ -147,7 +177,7 @@ export default function AdminMessage() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Has {reportId} been Finished
+            Has {username}&apos;s ticket been finished?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

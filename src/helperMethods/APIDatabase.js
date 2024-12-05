@@ -1,5 +1,5 @@
 import { db } from "../FirebaseConfig";
-import { ref, get, child, update, set } from "firebase/database";
+import { ref, get, child, update } from "firebase/database";
 /**
  * Create User
  * Create Bet
@@ -183,6 +183,7 @@ async function getReports() {
         content: report.child("content").val(),
         userId: report.child("userId").val(),
         timestamp: report.child("timestamp").val(),
+        username: report.child("username").val(),
       };
       sortedReports.push(temp);
     }

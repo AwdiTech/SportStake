@@ -102,16 +102,16 @@ export default function Navbar({ isAdmin }) {
               >
                 Profile
               </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  navigate(`/leaderboard`);
+                  handleClose();
+                }}
+              >
+                Leaderboard
+              </MenuItem>
             </>
           )}
-          <MenuItem
-            onClick={() => {
-              navigate(`/leaderboard`);
-              handleClose();
-            }}
-          >
-            Leaderboard
-          </MenuItem>
 
           {/* Admin-only items */}
           {isAdmin && (
