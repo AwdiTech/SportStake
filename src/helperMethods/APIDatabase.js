@@ -90,34 +90,36 @@ async function updateBet(userId, betId, win, finalScore) {
   const dbRef = ref(db);
   const betRef = ref(db, `users/${userId}/bets/${betId}`);
   const statRef = ref(db, "stats/");
-  const stats = await get(child(dbRef, "stats"));
+  const stats = await get(dbRef, "stats");
   const betsByResult = await get(child(dbRef, "stats/betsByResult"));
   const payout = stats.child("payout").val();
   const lost = betsByResult.child("lost").val();
   const won = betsByResult.child("won").val();
   const bet = await get(child(dbRef, "users/" + userId + "/bets/" + betId));
-  const user = await get(dbRef, "users/" + userId);
+  const user = await get(child(dbRef, "users/" + userId));
   const points = user.child("points").val();
   const amount = bet.child("betAmount").val();
-  const userWins = user.child("win").val();
-  const userLoss = user.child("loss").val();
+  const userWins = user.child("wins").val();
+  const userLoss = user.child("losses").val();
   const odds = bet.child("betOdds").val();
 
   if (win) {
-    update(ref(db, `users/${userId}`), { points: points + amount * odds });
+    const newPoints = (points + amount * odds).toFixed(2);
     update(betRef, { result: "Won" });
-    update(betRef, { winnings: amount * odds });
-    update(betRef, { result: finalScore });
-    update(statRef, { payout: payout + amount * odds });
+    update(betRef, { winnings: (amount * odds).toFixed(2) });
+    update(betRef, { finalScore: finalScore });
+    update(statRef, { payouts: (payout + amount * odds).toFixed(2) });
     update(ref(db, "stats/betsByResult"), { won: won + 1 });
-    update(ref(db, `users/${userId}`), { points: points + amount * odds });
-    update(ref(db, `users/${userId}`), { win: userWins + 1 });
+    update(ref(db, `users/${userId}`), {
+      points: newPoints,
+    });
+    update(ref(db, `users/${userId}`), { wins: userWins + 1 });
   } else {
     update(betRef, { result: "Lost" });
     update(betRef, { winnings: 0 });
-    update(betRef, { result: finalScore });
+    update(betRef, { finalScore: finalScore });
     update(ref(db, "stats/betsByResult"), { lost: lost + 1 });
-    update(ref(db, `users/${userId}`), { loss: userLoss + 1 });
+    update(ref(db, `users/${userId}`), { losses: userLoss + 1 });
   }
 }
 
