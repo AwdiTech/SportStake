@@ -28,11 +28,15 @@ export default function Leaderboard() {
         const snapshot = await get(child(dbRef, "users"));
         if (snapshot.exists()) {
           const usersData = snapshot.val();
-          const usersList = Object.keys(usersData).map((userId) => ({
-            id: userId,
-            username: usersData[userId].username || "Unknown",
-            points: usersData[userId].points,
-          }));
+
+          const usersList = Object.keys(usersData)
+            .map((userId) => ({
+              id: userId,
+              username: usersData[userId].username || "Unknown",
+              points: usersData[userId].points,
+              isAdmin: usersData[userId].isAdmin || false,
+            }))
+            .filter((user) => !user.isAdmin); // Filter out admin users
 
           usersList.sort((a, b) => {
             if (b.points !== a.points) {
